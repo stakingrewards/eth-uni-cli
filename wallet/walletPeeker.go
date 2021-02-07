@@ -29,6 +29,7 @@ func NewUser(infuraAPIKey string, address string) *User {
 	}
 
 	infuraAddress := fmt.Sprintf("https://mainnet.infura.io/v3/%s", infuraAPIKey)
+	//infuraAddress := fmt.Sprintf("https://rinkeby.infura.io/v3/%s", infuraAPIKey)
 
 	client, err := ethclient.Dial(infuraAddress)
 	utils.CheckError(err)
