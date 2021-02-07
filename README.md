@@ -2,6 +2,18 @@
 
 This project should give us a short overview of your problem solving skills and technical understanding.
 
+## How to
+
+You need to get an api key from [infura.io](https://infura.io/)
+
+Clone the repo and execute the following:
+```shell
+go get .
+INFURA_API_KEY=<infura-api-key> go run main.go
+```
+
+Then go to http://127.0.0.1:3000/balance to see read the balance of a wallets
+
 ## Scope
 
 Build an API to interact with Ethereum and Uniswap.
