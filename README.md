@@ -4,10 +4,19 @@
 
 You need to get an api key from [infura.io](https://infura.io/)
 
+### With Go installed in your system
+
 Clone the repo and execute the following:
 ```shell
 go get .
 INFURA_API_KEY=<infura-api-key> go run main.go
+```
+
+### With docker
+
+```shell
+docker build -t eth-uni-cli .
+docker run -dp 3000:3000 -e INFURA_API_KEY='<infura-api-key>' eth-uni-cli
 ```
 
 Then go to http://127.0.0.1:3000/balance to see the balance of a wallets in a simple UI
