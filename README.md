@@ -1,7 +1,5 @@
 # Ethereum Uniswap CLI
 
-This project should give us a short overview of your problem solving skills and technical understanding.
-
 ## How to
 
 You need to get an api key from [infura.io](https://infura.io/)
@@ -12,7 +10,13 @@ go get .
 INFURA_API_KEY=<infura-api-key> go run main.go
 ```
 
-Then go to http://127.0.0.1:3000/balance to see read the balance of a wallets
+Then go to http://127.0.0.1:3000/balance to see the balance of a wallets in a simple UI
+
+## API
+
+- `/api/balance/<address>`: Returns the balance in `dai`, `sai`, `wei` and `mkr` of the given address
+- `/api/tx`: Exchanges a ether for a given token. See the parameters to know how to correctly use it.
+  - To use this endpoint, you need to pass the parameters in a get call: `/api/tx?address=<address>&coin=<dai|sai|mkr>&input-amount=<int>&output-amount=<int>&private-key=<key>`
 
 ## Scope
 

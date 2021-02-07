@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/Bullrich/eth-uni-cli/wallet"
 	"github.com/gofiber/fiber/v2"
@@ -13,15 +14,6 @@ import (
 
 func main() {
 	startWebServer()
-}
-
-func printBalances() {
-	apiKey := os.Getenv("INFURA_API_KEY")
-	walletAddress := os.Getenv("WALLET_ADDRESS")
-
-	client := wallet.NewUser(apiKey, walletAddress)
-
-	fmt.Println(client.GetBalances())
 }
 
 func startWebServer() {
@@ -45,7 +37,7 @@ func startWebServer() {
 		return c.Render("walletBalance", balanceMap)
 	})
 
-	app.Post("/balance/:address", func(c *fiber.Ctx) error {
+	app.Get("/api/balance/:address", func(c *fiber.Ctx) error {
 		user := wallet.NewUser(apiKey, c.Params("address"))
 		balance := user.GetBalances()
 		balanceJSON, err := json.Marshal(balance)
@@ -54,6 +46,43 @@ func startWebServer() {
 		}
 
 		return c.SendString(string(balanceJSON))
+	})
+
+	app.Get("/api/tx/", func(c *fiber.Ctx) error {
+		address := c.Query("address")
+		coin := c.Query("coin")
+		input := c.Query("input-amount")
+		output := c.Query("output-amount")
+		privateKey := c.Query("private-key")
+
+		inputValue, err := strconv.ParseInt(input, 10, 64)
+		if err != nil {
+			return c.SendString("Invalid input. Must be a number")
+		}
+
+		outputValue, err := strconv.ParseInt(output, 10, 64)
+		if err != nil {
+			return c.SendString("Invalid output. Must be a number")
+		}
+
+		client := wallet.NewUser(apiKey, address)
+
+		transaction, err := wallet.BuyCoin(client, privateKey, coin, inputValue, outputValue)
+		if err != nil {
+			return c.SendString(fmt.Sprintf("%+v", err))
+		}
+
+		response := &fiber.Map{
+			"transactionHash": transaction,
+			"message":         fmt.Sprintf("tx sent. See the transaction in: https://etherscan.io/tx/%s\n", transaction),
+		}
+
+		responseJSON, err := json.Marshal(response)
+		if err != nil {
+			return c.SendStatus(400)
+		}
+
+		return c.SendString(string(responseJSON))
 	})
 
 	app.Get("/", func(c *fiber.Ctx) error {

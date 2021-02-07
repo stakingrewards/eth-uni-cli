@@ -1,9 +1,12 @@
 package utils
 
-import "log"
+import (
+	"log"
+	"runtime/debug"
+)
 
 func CheckError(e error) {
 	if e != nil {
-		log.Fatal(e)
+		log.Fatal(e, string(debug.Stack()))
 	}
 }
