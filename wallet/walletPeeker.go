@@ -24,6 +24,10 @@ const saiContract = "0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359"
 
 // NewUser constructs a User object to interact with the ethereum network
 func NewUser(infuraAPIKey string, address string) *User {
+	if !(utils.IsAddressValid(address)) {
+		return nil
+	}
+
 	infuraAddress := fmt.Sprintf("https://mainnet.infura.io/v3/%s", infuraAPIKey)
 
 	client, err := ethclient.Dial(infuraAddress)
